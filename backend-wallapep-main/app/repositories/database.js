@@ -5,7 +5,7 @@ let database = {
     configuration:{
         host:"localhost",
         user: "root",
-        password: "prueba",
+        password: "root",
         database: "products",
         multipleStatements: true
     },
