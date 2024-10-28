@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-let LoginFormComponent = () => {
+let LoginFormComponent = (props) => {
 
     let [formData,setFormData] = useState({
         email: '- empty email -',
@@ -20,15 +20,20 @@ let LoginFormComponent = () => {
         });
     }
 
+    let clickLogin =  () => {
+        props.callBackOnFinishLogin(formData);
+    }
+
 
     return (
         <div>
             <form>
-                <input type="text" name="email" onChange={onChangeEmail} />
-                <input type="password" name="password" onChange={onChangePassword} />
+                <input type="text" name="email" onChange={onChangeEmail}/>
+                <input type="password" name="password" onChange={onChangePassword}/>
                 <input type="submit" value="Login"/>
+                <button onClick={clickLogin}>Accept</button>
             </form>
-            <p> { formData.email } </p>
+            <p> {formData.email} </p>
             <p> { formData.password } </p>
         </div>
 
