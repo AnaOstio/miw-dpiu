@@ -1,4 +1,4 @@
-import {Route, Routes, useNavigate} from "react-router-dom";
+import {Route, Routes, useLocation, useNavigate} from "react-router-dom";
 import { useState, useEffect } from "react";
 import LoginFormComponent from "./components/user/LoginFormComponent";
 import CreateUserComponent from "./components/user/CreateUserComponent";
@@ -12,11 +12,24 @@ let App = () => {
     let { Header, Content, Footer } = Layout;
     let [login, setLogin] = useState(false);
     let navigate = useNavigate();
+    let location = useLocation();
 
     // Comprueba si la sesión está activa al cargar
     useEffect(() => {
-        checkLoginIsActive();
+        checkAll()
     }, []);
+
+    let checkAll = async () => {
+        let isActive = await checkLoginIsActive()
+        checkUserAccess(isActive)
+    }
+
+    let checkUserAccess= async (isActive) => {
+        let href = location.pathname
+        if (!isActive && !["/", "/login","/register"].includes(href) ){
+            navigate("/login")
+        }
+    }
 
     let checkLoginIsActive = async () => {
         if (localStorage.getItem("apiKey") == null) {
@@ -41,9 +54,11 @@ let App = () => {
             if (!jsonData.activeApiKey) {
                 navigate("/login");
             }
+            return(jsonData.activeApiKey)
         } else {
             setLogin(false);
             navigate("/login");
+            return (false)
         }
     }
 
