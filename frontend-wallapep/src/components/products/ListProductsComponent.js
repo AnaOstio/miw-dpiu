@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import { Link } from "react-router-dom"
+import {Card, Col, Row} from "antd";
 
 let ListProductsComponent = () => {
     let [products, setProducts] = useState([])
@@ -33,15 +34,18 @@ let ListProductsComponent = () => {
         return (
         <div>
             <h2>Products</h2>
-            <ul>
+            <Row gutter={ [16, 16] } >
                 { products.map( p =>
-                    <li key={ p.id }>
-                        { p.title }
-                        { p.price }
-                        <Link to={ "/products/edit/"+p.id } > Edit </Link>
-                    </li>
+                    <Col span={8} >
+                        <Link to={ "/products/"+p.id }>
+                            <Card key={p.id} title={ p.title } cover={ <img src="/item1.png" />}>
+                                { p.price }
+                            </Card>
+                        </Link>
+                    </Col>
                 )}
-            </ul>
+            </Row>
+
         </div>
     )
 }

@@ -6,6 +6,7 @@ import EditProductComponent from "./components/products/editProductComponent";
 
 import { Layout, Menu } from 'antd';
 import MenuApp from "./components/common/menuApp";
+import DetailsProductComponent from "./components/products/DetailsProductComponent";
 
 let App = () => {
 
@@ -35,6 +36,9 @@ let App = () => {
                         <Route path="/products/edit/:id" element={
                             <EditProductComponent/>
                         }></Route>
+                        <Route path="/products/:id" element={
+                            <DetailsProductComponent/>
+                        } />
                     </Routes>
                 </div>
             </Content>

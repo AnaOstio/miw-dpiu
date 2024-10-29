@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {modifyStateProperty} from "../../utils/utilsState";
 import {useNavigate} from "react-router-dom";
+import {Col, Row, Form, Input, Button, Card} from "antd";
 
 let LoginFormComponent = (props) => {
 
@@ -34,20 +35,34 @@ let LoginFormComponent = (props) => {
                 console.log("Error: "+e.msg)
             })
         }
-
     }
 
     return (
-        <div>
-            <h2>Login User</h2>
-            <input
-                onChange={(i) => modifyStateProperty(formData, setFormData, "email", i.currentTarget.value)}
-                type="text" name="email"/>
-            <input
-                onChange={(i) => modifyStateProperty(formData, setFormData, "password", i.currentTarget.value)}
-                type="password" name="password"/>
-            <button onClick={clickLogin}>Login User</button>
-        </div>
+        <Row align="middle" justify="center" style={{ minHeight: "70vh"}}>
+            <Col xs={0} sm={0} md={12} lg={8} xl={6}><img src="/iniciar-sesion.png" width="100%"/></Col>
+            <Col xs={24} sm={24} md={12} lg={12} xl={10}>
+                <Card title="Login" style={{ width: "100%", margin: "15px"}}>
+                    <Form.Item label="" name="email">
+                        <Input placeholder="your email" onChange={(i) => {
+                            modifyStateProperty(formData, setFormData,
+                                "email", i.currentTarget.value)
+                        }}/>
+                    </Form.Item>
+
+                    <Form.Item label="" name="password">
+                        <Input.Password placeholder="your password" onChange={(i) => {
+                            modifyStateProperty(formData, setFormData,
+                                "password", i.currentTarget.value)
+                        }}/>
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button type="primary" onClick={clickLogin} block>Login User</Button>
+                    </Form.Item>
+                </Card>
+            </Col>
+        </Row>
+
     )
 }
 
