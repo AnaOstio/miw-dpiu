@@ -5,6 +5,8 @@ import {Col, Row, Form, Input, Button, Card} from "antd";
 
 let LoginFormComponent = (props) => {
 
+    let { setLogin } = props
+
     let navigate = useNavigate();
 
     let [formData,setFormData] = useState({
@@ -27,6 +29,7 @@ let LoginFormComponent = (props) => {
                 localStorage.setItem("email",responseBody.email)
             }
             console.log("ok "+responseBody)
+            setLogin(true)
             navigate("/products")
         } else {
             let responseBody = await response.json();
