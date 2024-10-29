@@ -63,7 +63,7 @@ productsRepository = {
 
         try{
             await database.connect();
-            products = await database.query("SELECT products.id, products.title, products.description, products.category," +
+            products = await database.query("SELECT products.id, products.title, products.description, products.price, products.category," +
                 "users.email as buyerEmail, users.name as buyerName " +
                 "FROM products LEFT JOIN users ON products.buyerId = users.id")
             await database.disconnect();

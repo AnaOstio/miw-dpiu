@@ -1,7 +1,10 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import {modifyStateProperty} from "../../utils/utilsState";
+import {useNavigate} from "react-router-dom";
 
 let LoginFormComponent = (props) => {
+
+    let navigate = useNavigate();
 
     let [formData,setFormData] = useState({
         email: '',
@@ -17,11 +20,13 @@ let LoginFormComponent = (props) => {
 
         if (response.ok){
             let responseBody = await response.json();
+            // siempre tenemos que valiadar primero que existen antes de guardar estos valores
             if ( responseBody.apiKey && responseBody.email){
                 localStorage.setItem("apiKey",responseBody.apiKey)
                 localStorage.setItem("email",responseBody.email)
             }
             console.log("ok "+responseBody)
+            navigate("/products")
         } else {
             let responseBody = await response.json();
             let serverErrors = responseBody.errors;
