@@ -1,12 +1,14 @@
 import {Route, Routes, useLocation, useNavigate} from "react-router-dom";
+import { Layout } from 'antd';
 import { useState, useEffect } from "react";
 import LoginFormComponent from "./components/user/LoginFormComponent";
 import CreateUserComponent from "./components/user/CreateUserComponent";
 import ListProductsComponent from "./components/products/ListProductsComponent";
 import EditProductComponent from "./components/products/editProductComponent";
-import { Layout } from 'antd';
 import MenuApp from "./components/common/menuApp";
 import DetailsProductComponent from "./components/products/DetailsProductComponent";
+import CreateProductComponent from "./components/products/CreateProductComponent";
+import ListMyProductsComponent from "./components/products/ListMyProductsComponent";
 
 let App = () => {
     let { Header, Content, Footer } = Layout;
@@ -76,6 +78,8 @@ let App = () => {
                         <Route path="/products" element={<ListProductsComponent />} />
                         <Route path="/products/edit/:id" element={<EditProductComponent />} />
                         <Route path="/products/:id" element={<DetailsProductComponent />} />
+                        <Route path="/products/create" element={<CreateProductComponent />} />
+                        <Route path="/products/own" element={<ListMyProductsComponent />} />
                     </Routes>
                 </div>
             </Content>
