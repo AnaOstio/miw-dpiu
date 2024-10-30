@@ -1,6 +1,7 @@
 import {useState, useEffect } from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import { Typography, Card, Descriptions, Image } from 'antd';
+import { Typography, Card, Descriptions, Image, Button } from 'antd';
+import {ShoppingOutlined} from "@ant-design/icons";
 
 let DetailsProductComponent = () => {
     const { id } = useParams();
@@ -11,6 +12,34 @@ let DetailsProductComponent = () => {
     useEffect(() => {
         getProduct(id);
     }, [])
+
+    let buyProduct = async () => {
+        let response = await fetch(
+            process.env.REACT_APP_BACKEND_BASE_URL+"/transactions/",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json ",
+                    "apikey": localStorage.getItem("apiKey")
+                },
+                body: JSON.stringify({
+                    productId: id
+                })
+            });
+
+        if ( response.ok ){
+            let jsonData = await response.json();
+            if (jsonData.affectedRows == 1){
+
+            }
+        } else {
+            let responseBody = await response.json();
+            let serverErrors = responseBody.errors;
+            serverErrors.forEach( e => {
+                console.log("Error: "+e.msg)
+            })
+        }
+    }
 
     let getProduct = async (id) => {
         let response = await fetch(
@@ -53,6 +82,12 @@ let DetailsProductComponent = () => {
                 <Descriptions.Item>
                     <Text strong underline style={{ fontSize:20 }}>{ product.price }</Text>
                     { product.price < 10000 ? <Text>Oferta</Text> :  <Text>NO-Oferta</Text> }
+                </Descriptions.Item>
+                <Descriptions.Item>
+                    <Button type="primary" onClick={buyProduct}
+                            icon={<ShoppingOutlined/>} size="large">
+                        Buy
+                    </Button>
                 </Descriptions.Item>
             </Descriptions>
         </Card>
