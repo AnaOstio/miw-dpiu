@@ -5,7 +5,7 @@ import {Col, Row, Form, Input, Button, Card} from "antd";
 
 let LoginFormComponent = (props) => {
 
-    let { setLogin } = props
+    let { setLogin, openNotification } = props
 
     let navigate = useNavigate();
 
@@ -30,11 +30,13 @@ let LoginFormComponent = (props) => {
             }
             console.log("ok "+responseBody)
             setLogin(true)
+            openNotification("top", "Login successful", "success");
             navigate("/products")
         } else {
             let responseBody = await response.json();
             let serverErrors = responseBody.errors;
             serverErrors.forEach( e => {
+                openNotification("top", e.msg, "error")
                 console.log("Error: "+e.msg)
             })
         }

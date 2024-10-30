@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import { Table, Space } from 'antd';
 import { Link } from "react-router-dom";
+import {timestampToString} from "../../utils/utilsDate";
 
 let ListMyProductsComponent = () => {
     let [products, setProducts] = useState([])
@@ -84,6 +85,7 @@ let ListMyProductsComponent = () => {
         {
             title: "Date",
             dataIndex: "date",
+            render: (date) => timestampToString(date)
         },
         {
             title: "Buyer",

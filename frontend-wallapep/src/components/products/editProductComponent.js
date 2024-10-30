@@ -1,7 +1,8 @@
 import {useState, useEffect } from "react";
 import {useNavigate, useParams} from "react-router-dom";
-import {Button, Card, Col, Input, Row, Form} from "antd";
+import {Button, Card, Col, Input, Row, Form, DatePicker} from "antd";
 import {modifyStateProperty} from "../../utils/utilsState";
+import {dateFormatTemplate, timestampToDate} from "../../utils/utilsDate";
 
 let EditProductComponent = () => {
     const { id } = useParams();
@@ -92,6 +93,16 @@ let EditProductComponent = () => {
                                value={formData?.price}>
                         </Input>
                     </Form.Item>
+
+                    <Form.Item label="">
+                        <DatePicker value={ formData.date && timestampToDate(formData.date) }
+                                    format={ dateFormatTemplate }
+                                    onChange={ (inDate, inString) => {
+                                        console.log(inString)
+                                    } }
+                        />
+                    </Form.Item>
+
 
                     <Button type="primary" onClick={clickEditProduct}  block >Edit Product</Button>
                 </Card>

@@ -1,5 +1,5 @@
 import {Route, Routes, useLocation, useNavigate} from "react-router-dom";
-import { Layout } from 'antd';
+import {Layout, notification} from 'antd';
 import { useState, useEffect } from "react";
 import LoginFormComponent from "./components/user/LoginFormComponent";
 import CreateUserComponent from "./components/user/CreateUserComponent";
@@ -11,6 +11,7 @@ import CreateProductComponent from "./components/products/CreateProductComponent
 import ListMyProductsComponent from "./components/products/ListMyProductsComponent";
 
 let App = () => {
+    const [api, contextHolder] = notification.useNotification();
     let { Header, Content, Footer } = Layout;
     let [login, setLogin] = useState(false);
     let navigate = useNavigate();
@@ -64,8 +65,19 @@ let App = () => {
         }
     }
 
+    // Funcion para crear notifiaciones
+    const openNotification = (placement, text, type) => {
+        api[type]({
+            message: 'Notification',
+            description: text,
+            placement,
+        });
+    };
+
+
     return (
         <Layout className="layout" style={{ minHeight: "100vh" }}>
+            { contextHolder }
             <Header>
                 <MenuApp login={login} setLogin={setLogin} />
             </Header>
@@ -73,8 +85,8 @@ let App = () => {
                 <div className="site-layout-content">
                     <Routes>
                         <Route path="/" element={<h1>Index</h1>} />
-                        <Route path="/register" element={<CreateUserComponent />} />
-                        <Route path="/login" element={<LoginFormComponent setLogin={setLogin} />} />
+                        <Route path="/register" element={<CreateUserComponent openNotification={openNotification}/>} />
+                        <Route path="/login" element={<LoginFormComponent setLogin={setLogin} openNotification={openNotification} />} />
                         <Route path="/products" element={<ListProductsComponent />} />
                         <Route path="/products/edit/:id" element={<EditProductComponent />} />
                         <Route path="/products/:id" element={<DetailsProductComponent />} />

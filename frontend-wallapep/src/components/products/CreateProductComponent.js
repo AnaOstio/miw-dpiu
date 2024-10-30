@@ -1,7 +1,7 @@
 
 import {useState} from "react";
 import {modifyStateProperty} from "../../utils/utilsState";
-import {Card, Input, Button, Row, Col, Form, Typography} from "antd";
+import {Card, Input, Button, Row, Col, Form, Typography, Upload} from "antd";
 
 let CreateProductComponent = () => {
     let [formData, setFormData] = useState({})
@@ -18,6 +18,30 @@ let CreateProductComponent = () => {
             })
 
         if (response.ok){
+            let data = await response.json()
+            await uploadImage(data.productId)
+        } else {
+            let responseBody = await response.json();
+            let serverErrors = responseBody.errors;
+            serverErrors.forEach(e => {
+                console.log("Error: " + e.msg)
+            })
+        }
+    }
+
+    let uploadImage = async (productId) => {
+        let formDataImage = new FormData();
+        formDataImage.append('image', formData.image);
+
+        let response = await fetch(
+            process.env.REACT_APP_BACKEND_BASE_URL + "/products/"+productId+"/image", {
+                method: "POST",
+                headers: {
+                    "apikey": localStorage.getItem("apiKey")
+                },
+                body: formDataImage
+            })
+        if (response.ok) {
 
         } else {
             let responseBody = await response.json();
@@ -53,6 +77,15 @@ let CreateProductComponent = () => {
                                 formData, setFormData, "price", i.currentTarget.value)}
                                size="large" type="number" placeholder="price"></Input>
                     </Form.Item>
+
+                    <Form.Item name="image">
+                        <Upload  action={
+                            (file) => modifyStateProperty(
+                                formData, setFormData, "image", file) }  listType="picture-card">
+                            Upload
+                        </Upload>
+                    </Form.Item>
+
 
                     <Button type="primary" block onClick={clickCreateProduct}>Sell Product</Button>
                 </Card>
