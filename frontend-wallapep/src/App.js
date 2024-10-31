@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import LoginFormComponent from "./components/user/LoginFormComponent";
 import CreateUserComponent from "./components/user/CreateUserComponent";
 import ListProductsComponent from "./components/products/ListProductsComponent";
-import EditProductComponent from "./components/products/editProductComponent";
-import MenuApp from "./components/common/menuApp";
 import DetailsProductComponent from "./components/products/DetailsProductComponent";
 import CreateProductComponent from "./components/products/CreateProductComponent";
 import ListMyProductsComponent from "./components/products/ListMyProductsComponent";
+import MenuApp from "./components/common/MenuApp";
+import EditProductComponent from "./components/products/EditProductComponent";
 
 let App = () => {
     const [api, contextHolder] = notification.useNotification();
