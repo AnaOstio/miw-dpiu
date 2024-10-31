@@ -9,10 +9,11 @@ import CreateProductComponent from "./components/products/CreateProductComponent
 import ListMyProductsComponent from "./components/products/ListMyProductsComponent";
 import MenuApp from "./components/common/MenuApp";
 import EditProductComponent from "./components/products/EditProductComponent";
+import FooterApp from "./components/common/FooterApp";
 
 let App = () => {
     const [api, contextHolder] = notification.useNotification();
-    let { Header, Content, Footer } = Layout;
+    let { Header, Content } = Layout;
     let [login, setLogin] = useState(false);
     let navigate = useNavigate();
     let location = useLocation();
@@ -95,7 +96,7 @@ let App = () => {
                     </Routes>
                 </div>
             </Content>
-            <Footer style={{ textAlign: "center" }}>Wallapep</Footer>
+            <FooterApp />
         </Layout>
     );
 }
