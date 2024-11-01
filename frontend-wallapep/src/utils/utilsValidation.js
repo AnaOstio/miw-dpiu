@@ -7,6 +7,22 @@ export let validateFormDataInputRequired =
             formData, inputKey, formErrors, setFormErrors, regexNotEmpty, errorMessage)
     }
 
+export let validateSamePassword = (formData, repeatPasswordValue, formErrors, setFormErrors) => {
+    const password = formData.password;
+
+    const errorMessage = "Passwords do not match";
+
+    if (password && repeatPasswordValue && password === repeatPasswordValue) {
+        setFormErrors(prevErrors => ({ ...prevErrors, repeat_password: null }));
+        return true;
+    } else {
+        setFormErrors(prevErrors => ({
+            ...prevErrors,
+            repeat_password: { msg: errorMessage }
+        }));
+        return false;
+    }
+};
 
 export let validateFormDataInputEmail =
     (formData, inputKey, formErrors, setFormErrors) => {
