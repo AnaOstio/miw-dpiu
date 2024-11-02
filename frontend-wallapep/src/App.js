@@ -86,7 +86,7 @@ let App = () => {
                 <div className="site-layout-content">
                     <Routes>
                         <Route path="/" element={<h1>Index</h1>} />
-                        <Route path="/register" element={<CreateUserComponent openNotification={openNotification}/>} />
+                        <Route path="/register" element={<CreateUserComponent setLogin={setLogin} openNotification={openNotification}/>} />
                         <Route path="/login" element={<LoginFormComponent setLogin={setLogin} openNotification={openNotification} />} />
                         <Route path="/products" element={<ListProductsComponent />} />
                         <Route path="/products/edit/:id" element={<EditProductComponent />} />

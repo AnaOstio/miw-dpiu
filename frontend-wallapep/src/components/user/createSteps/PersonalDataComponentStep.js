@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 
 let PersonalDataComponentStep = (props) => {
 
-    let { increaseCurrent, decreaseCurrent, formData, setFormData, openNotification } = props
+    let { increaseCurrent, decreaseCurrent, formData, setFormData } = props
 
     let selectOptions = [
             {
@@ -64,9 +64,14 @@ let PersonalDataComponentStep = (props) => {
                 <Col span={8}>
                     <Form.Item label={<IdcardOutlined />}>
                         <Select
-                            defaultValue="NIF"
+                            defaultValue={selectOptions[0].value}
+                            value={formData.value || undefined}
                             style={{ width: "100%" }}
                             options={selectOptions}
+                            onChange={(value) => {
+                                modifyStateProperty(formData, setFormData,
+                                    "documentIdentity", value)
+                            }}
                         />
                     </ Form.Item>
                 </Col>
