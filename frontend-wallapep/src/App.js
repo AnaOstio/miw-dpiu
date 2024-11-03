@@ -88,11 +88,11 @@ let App = () => {
                         <Route path="/" element={<h1>Index</h1>} />
                         <Route path="/register" element={<CreateUserComponent setLogin={setLogin} openNotification={openNotification}/>} />
                         <Route path="/login" element={<LoginFormComponent setLogin={setLogin} openNotification={openNotification} />} />
-                        <Route path="/products" element={<ListProductsComponent />} />
-                        <Route path="/products/edit/:id" element={<EditProductComponent />} />
-                        <Route path="/products/:id" element={<DetailsProductComponent />} />
-                        <Route path="/products/create" element={<CreateProductComponent />} />
-                        <Route path="/products/own" element={<ListMyProductsComponent />} />
+                        <Route path="/products" element={<ListProductsComponent openNotification={openNotification}/>} />
+                        <Route path="/products/edit/:id" element={<EditProductComponent openNotification={openNotification} />} />
+                        <Route path="/products/:id" element={<DetailsProductComponent openNotification={openNotification} />} />
+                        <Route path="/products/create" element={<CreateProductComponent openNotification={openNotification} />} />
+                        <Route path="/products/own" element={<ListMyProductsComponent openNotification={openNotification} />} />
                     </Routes>
                 </div>
             </Content>

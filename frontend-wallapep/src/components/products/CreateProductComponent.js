@@ -1,31 +1,36 @@
+import { useState } from "react";
+import { modifyStateProperty } from "../../utils/utilsState";
+import {Card, Input, Button, Row, Col, Form, Upload, Select, Typography, Tag} from "antd";
+import {categories} from "../../utils/useCategories";
+import {allowSubmitForm, validateFormDataInputRequired} from "../../utils/utilsValidation";
+import {useNavigate} from "react-router-dom";
 
-import {useState} from "react";
-import {modifyStateProperty} from "../../utils/utilsState";
-import {Card, Input, Button, Row, Col, Form, Typography, Upload} from "antd";
-import { useSelector, useDispatch } from "react-redux";
-import { actions } from "../../reducers/reducerCountSlice";
+let CreateProductComponent = (props) => {
 
-let CreateProductComponent = () => {
-    const countGlobalState1 = useSelector(state => state.reducerCount);
-    const countGlobalState2 = useSelector(state => state.reducerCountSlice);
-    const dispatch = useDispatch();
+    let { openNotification } = props;
+
+    let navigate = useNavigate();
 
     let [formData, setFormData] = useState({})
+    let [formErrors, setFormErrors] = useState({})
+    let requiredInForm = ["title","category", "price"]
 
     let clickCreateProduct = async () => {
         let response = await fetch(
-            process.env.REACT_APP_BACKEND_BASE_URL + "/products",{
+            process.env.REACT_APP_BACKEND_BASE_URL + "/products", {
                 method: "POST",
                 headers: {
-                    "Content-Type" : "application/json ",
+                    "Content-Type": "application/json ",
                     "apikey": localStorage.getItem("apiKey")
                 },
                 body: JSON.stringify(formData)
             })
 
-        if (response.ok){
+        if (response.ok) {
             let data = await response.json()
             await uploadImage(data.productId)
+            openNotification("top", "Product added", "success");
+            navigate("/products")
         } else {
             let responseBody = await response.json();
             let serverErrors = responseBody.errors;
@@ -40,7 +45,7 @@ let CreateProductComponent = () => {
         formDataImage.append('image', formData.image);
 
         let response = await fetch(
-            process.env.REACT_APP_BACKEND_BASE_URL + "/products/"+productId+"/image", {
+            process.env.REACT_APP_BACKEND_BASE_URL + "/products/" + productId + "/image", {
                 method: "POST",
                 headers: {
                     "apikey": localStorage.getItem("apiKey")
@@ -59,46 +64,20 @@ let CreateProductComponent = () => {
     }
 
     return (
-        <Row align="middle" justify="center" style={{minHeight: "70vh"}}>
+        <Row align="middle" justify="center" style={{ minHeight: "70vh" }}>
             <Col>
-                <Card title="Create product" style={{width: "500px"}}>
-                    <p> Global count1: {countGlobalState1} </p>
-                    <button onClick={() => {
-                        dispatch({type: "plus/count"})
-                    }}> +1
-                    </button>
-                    <button onClick={() => {
-                        dispatch({type: "less/count"})
-                    }}> -1
-                    </button>
-                    <button
-                        onClick={() => {
-                            dispatch({type: "modify/count", payload: 999})
-                        }}>
-                        to 999
-                    </button>
-
-                    <p> Global count2: {countGlobalState2} </p>
-                    <button onClick={() => {
-                        dispatch(actions.increment())
-                    }}> +1
-                    </button>
-                    <button onClick={() => {
-                        dispatch(actions.decrement())
-                    }}> -1
-                    </button>
-                    <button
-                        onClick={() => {
-                            dispatch(actions.modify(1))
-                        }}>
-                        to 1
-                    </button>
-
-                    <Form.Item label="">
+                <Card title="Create product" style={{ width: "500px" }}>
+                    <Form.Item label=""
+                               validateStatus={
+                                   validateFormDataInputRequired(
+                                       formData, "title", formErrors, setFormErrors) ? "success" : "error"}
+                    >
                         <Input onChange={
                             (i) => modifyStateProperty(
                                 formData, setFormData, "title", i.currentTarget.value)}
-                               size="large" type="text" placeholder="product title"></Input>
+                               size="large" type="text" placeholder="product title" />
+                        {formErrors?.title?.msg &&
+                            <Typography.Text type="danger"> {formErrors?.title?.msg} </Typography.Text>}
                     </Form.Item>
 
                     <Form.Item label="">
@@ -108,23 +87,62 @@ let CreateProductComponent = () => {
                                size="large" type="text" placeholder="description"></Input>
                     </Form.Item>
 
-                    <Form.Item label="">
+                    <Form.Item label=""
+                               validateStatus={
+                                   validateFormDataInputRequired(
+                                       formData, "price", formErrors, setFormErrors) ? "success" : "error"}
+                    >
                         <Input onChange={
                             (i) => modifyStateProperty(
                                 formData, setFormData, "price", i.currentTarget.value)}
                                size="large" type="number" placeholder="price"></Input>
+                        {formErrors?.price?.msg &&
+                            <Typography.Text type="danger"> {formErrors?.price?.msg} </Typography.Text>}
+                    </Form.Item>
+
+                    <Form.Item label=""
+                               validateStatus={
+                                   validateFormDataInputRequired(
+                                       formData, "category", formErrors, setFormErrors) ? "success" : "error"}
+                    >
+                        <Select
+                            placeholder="Select category"
+                            size="large"
+                            style={{ width: '100%' }}
+                            onChange={(value) => modifyStateProperty(formData, setFormData, "category", value)}
+                        >
+                            {categories.map(category => (
+                                <Select.Option key={category.value} value={category.value}>
+                                    <Tag color={category.color}>
+                                        {category.icon} {category.label}
+                                    </Tag>
+                                </Select.Option>
+                            ))}
+                        </Select>
+                        {formErrors?.category?.msg &&
+                            <Typography.Text type="danger"> {formErrors?.category?.msg} </Typography.Text>}
                     </Form.Item>
 
                     <Form.Item name="image">
-                        <Upload action={
-                            (file) => modifyStateProperty(
-                                formData, setFormData, "image", file)} listType="picture-card">
-                            Upload
-                        </Upload>
+                            <Upload
+                                maxCount={1}
+                                listType="picture-card"
+                                action={
+                                    (file) => modifyStateProperty(
+                                        formData, setFormData, "image", file)
+                                }
+                            >
+                                Upload
+                            </Upload>
                     </Form.Item>
 
+                    <Form.Item>
+                        {allowSubmitForm(formData,formErrors,requiredInForm) ?
+                            <Button type="primary" block onClick={clickCreateProduct}>Sell Product</Button> :
+                            <Button type="primary" block disabled>Sell Product</Button>
+                        }
+                    </Form.Item>
 
-                    <Button type="primary" block onClick={clickCreateProduct}>Sell Product</Button>
                 </Card>
             </Col>
         </Row>
