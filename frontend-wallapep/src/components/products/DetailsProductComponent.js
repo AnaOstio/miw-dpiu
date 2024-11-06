@@ -132,7 +132,7 @@ let DetailsProductComponent = () => {
                         </Typography.Text>
 
 
-                        <Button type="primary" href="https://ant.design" target="_blank">
+                        <Button type="primary" onClick={() => navigate("/payment/" + product.id)}>
                             <ShoppingOutlined /> Buy
                         </Button>
                     </Flex>
