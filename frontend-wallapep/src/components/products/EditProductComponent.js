@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Card, Col, Input, Row, Form, DatePicker } from "antd";
+import {Button, Card, Col, Input, Row, Form, DatePicker, Select, Tag, Typography} from "antd";
 import { modifyStateProperty } from "../../utils/utilsState";
 import { dateFormatTemplate, timestampToDate } from "../../utils/utilsDate";
+import {categories} from "../../utils/useCategories";
+import {validateFormDataInputRequired} from "../../utils/utilsValidation";
 
 let EditProductComponent = () => {
     const { id } = useParams();
     let navigate = useNavigate();
 
-    let [product, setProduct] = useState({})
     let [formData, setFormData] = useState({})
 
     useEffect(() => {
@@ -50,6 +51,8 @@ let EditProductComponent = () => {
 
         if (response.ok) {
             let jsonData = await response.json();
+            jsonData.fullCategoy = categories.find(cat => cat.value === jsonData.category);
+
             setFormData(jsonData)
         } else {
             let responseBody = await response.json();
@@ -92,6 +95,29 @@ let EditProductComponent = () => {
                             value={formData?.price}>
                         </Input>
                     </Form.Item>
+
+                    {
+                        formData.fullCategoy && (
+                            <Form.Item label=""
+                            >
+                                <Select
+                                    placeholder="Select category"
+                                    size="large"
+                                    value={formData.category|| undefined}
+                                    style={{ width: '100%' }}
+                                    onChange={(value) => modifyStateProperty(formData, setFormData, "category", value)}
+                                >
+                                    {categories.map(category => (
+                                        <Select.Option key={category.value} value={category.value}>
+                                            <Tag color={category.color}>
+                                                {category.icon} {category.label}
+                                            </Tag>
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        )
+                    }
 
 
                     <Button type="primary" onClick={clickEditProduct} block >Edit Product</Button>
