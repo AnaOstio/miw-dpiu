@@ -30,10 +30,10 @@ let LoginFormComponent = (props) => {
 
         if (response.ok){
             let responseBody = await response.json();
-            // siempre tenemos que valiadar primero que existen antes de guardar estos valores
             if ( responseBody.apiKey && responseBody.email){
                 localStorage.setItem("apiKey",responseBody.apiKey)
                 localStorage.setItem("email",responseBody.email)
+                localStorage.setItem("userId",responseBody.id)
             }
             console.log("ok "+responseBody)
             setLogin(true)

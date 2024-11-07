@@ -136,7 +136,7 @@ let ProfileUser = () => {
     };
 
     return (
-        <div>
+        <>
             <h1>User Profile</h1>
             {
                 userData && <ProfileCard user={userData} />
@@ -154,7 +154,7 @@ let ProfileUser = () => {
             <ul>
                 <ProductsTable products={products} />
             </ul>
-        </div>
+        </>
     );
 };
 
