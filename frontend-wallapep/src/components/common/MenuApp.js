@@ -39,7 +39,7 @@ let MenuApp = ({ login, setLogin }) => {
                     {login && (
                         <Menu theme="dark" mode="horizontal" items={[
                             { key: "logo", label: <img src="/logo.png" width="40" height="40" /> },
-                            { key: "menuProducts", label: <Link to="/products">Products</Link> },
+                            { key: "menuProducts", label: <Link to="/all-products/all">Products</Link> },
                             { key: "menuCreateProduct", label: <Link to="/products/create">Sell</Link> },
                             { key: "menuMyProduct", label: <Link to="/products/own">My Products</Link> },
                             { key: "menuMyTransactions", label: <Link to={"/myTransactions" } >My transactions</Link> },

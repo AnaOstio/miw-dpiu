@@ -3,22 +3,23 @@ import { Col, Row, Typography, Pagination } from "antd";
 import { checkURL } from "../../utils/utilsURL";
 import ProductCard from "./ProductCard";
 import Filters from "./filters/Filters";
-
+import { useParams } from "react-router-dom";
 
 const { Title } = Typography;
 
 let ListProductsComponent = (props) => {
     let { openNotification } = props;
+    let { category } = useParams(); // Capturamos la categoría desde la URL
     let [products, setProducts] = useState([]);
     let [filteredProducts, setFilteredProducts] = useState([]);
     let [selectedCategories, setSelectedCategories] = useState([]);
     let [searchTitle, setSearchTitle] = useState("");
     let [priceRange, setPriceRange] = useState([0, 1000]);
-    let [formErrors, setFormErrors] = useState({})
-
+    let [formErrors, setFormErrors] = useState({});
     let [currentPage, setCurrentPage] = useState(1);
     let itemsPerPage = 8;
 
+    // Cargar productos al inicio
     useEffect(() => {
         getProducts();
     }, []);
@@ -57,6 +58,7 @@ let ListProductsComponent = (props) => {
         }
     };
 
+    // Filtrar productos por categorías, título y precio
     let filterProducts = () => {
         let filtered = products.filter(p => {
             const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(p.category);
@@ -66,21 +68,25 @@ let ListProductsComponent = (props) => {
         });
 
         setFilteredProducts(filtered);
-        setCurrentPage(1);
+        setCurrentPage(1); // Volver a la primera página al filtrar
     };
 
+    // Manejar el cambio en los checkboxes de categorías
     const handleCategoryChange = (checkedValues) => {
         setSelectedCategories(checkedValues);
     };
 
+    // Filtrar por título
     const handleTitleSearch = (value) => {
         setSearchTitle(value);
     };
 
+    // Manejar el cambio de precio
     const handlePriceChange = (value) => {
         setPriceRange(value);
     };
 
+    // Resetear filtros
     const resetFilters = () => {
         setSelectedCategories([]);
         setSearchTitle("");
@@ -90,8 +96,20 @@ let ListProductsComponent = (props) => {
     };
 
     useEffect(() => {
+        // Cuando cambien los filtros, se aplica el filtro
         filterProducts();
     }, [selectedCategories, searchTitle, priceRange]);
+
+    // Detectar la categoría desde la URL y actualizar los filtros automáticamente
+    useEffect(() => {
+        if (category) {
+            if (category === "all") {
+                setSelectedCategories([]);
+            } else {
+                setSelectedCategories([category]); // Seleccionamos la categoría de la URL
+            }
+        }
+    }, [category]);
 
     let startIndex = (currentPage - 1) * itemsPerPage;
     let endIndex = startIndex + itemsPerPage;

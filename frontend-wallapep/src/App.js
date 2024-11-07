@@ -12,6 +12,7 @@ import EditProductComponent from "./components/products/EditProductComponent";
 import FooterApp from "./components/common/FooterApp";
 import MyTransactionsComponent from "./components/transactions/MyTransactionsComponent";
 import ProfileUser from "./components/user/ProfileUser";
+import LandingComponent from "./components/landing/LandingComponent";
 
 let App = () => {
     const [api, contextHolder] = notification.useNotification();
@@ -87,10 +88,10 @@ let App = () => {
             <Content style={{ padding: "20px 50px" }}>
                 <div className="site-layout-content">
                     <Routes>
-                        <Route path="/" element={<h1>Index</h1>} />
+                        <Route path="/" element={<LandingComponent />} />
                         <Route path="/register" element={<CreateUserComponent setLogin={setLogin} openNotification={openNotification} />} />
                         <Route path="/login" element={<LoginFormComponent setLogin={setLogin} openNotification={openNotification} />} />
-                        <Route path="/products" element={<ListProductsComponent openNotification={openNotification} />} />
+                        <Route path="/all-products/:category" element={<ListProductsComponent openNotification={openNotification} />} />
                         <Route path="/products/edit/:id" element={<EditProductComponent openNotification={openNotification} />} />
                         <Route path="/products/:id" element={<DetailsProductComponent openNotification={openNotification} />} />
                         <Route path="/products/create" element={<CreateProductComponent openNotification={openNotification} />} />
