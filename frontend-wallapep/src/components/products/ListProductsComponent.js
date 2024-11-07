@@ -4,18 +4,20 @@ import { checkURL } from "../../utils/utilsURL";
 import ProductCard from "./ProductCard";
 import Filters from "./filters/Filters";
 
+
 const { Title } = Typography;
 
-let ListProductsComponent = () => {
+let ListProductsComponent = (props) => {
+    let { openNotification } = props;
     let [products, setProducts] = useState([]);
     let [filteredProducts, setFilteredProducts] = useState([]);
     let [selectedCategories, setSelectedCategories] = useState([]);
     let [searchTitle, setSearchTitle] = useState("");
     let [priceRange, setPriceRange] = useState([0, 1000]);
+    let [formErrors, setFormErrors] = useState({})
 
-    // Estados para la paginación
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8; // Cantidad de productos por página
+    let [currentPage, setCurrentPage] = useState(1);
+    let itemsPerPage = 8;
 
     useEffect(() => {
         getProducts();
@@ -55,8 +57,8 @@ let ListProductsComponent = () => {
         }
     };
 
-    const filterProducts = () => {
-        const filtered = products.filter(p => {
+    let filterProducts = () => {
+        let filtered = products.filter(p => {
             const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(p.category);
             const matchesTitle = searchTitle === "" || p.title.toLowerCase().includes(searchTitle.toLowerCase());
             const matchesPrice = p.price >= priceRange[0] && p.price <= priceRange[1];
@@ -84,20 +86,18 @@ let ListProductsComponent = () => {
         setSearchTitle("");
         setPriceRange([0, 1000]);
         setFilteredProducts(products);
-        setCurrentPage(1); // Reinicia a la primera página al resetear filtros
+        setCurrentPage(1);
     };
 
     useEffect(() => {
         filterProducts();
     }, [selectedCategories, searchTitle, priceRange]);
 
-    // Calcular el índice de productos para la página actual
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentProducts = filteredProducts.slice(startIndex, endIndex);
+    let startIndex = (currentPage - 1) * itemsPerPage;
+    let endIndex = startIndex + itemsPerPage;
+    let currentProducts = filteredProducts.slice(startIndex, endIndex);
 
-    // Manejador de cambio de página
-    const handlePageChange = (page) => {
+    let handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
@@ -120,12 +120,11 @@ let ListProductsComponent = () => {
 
                 <Row gutter={[16, 16]}>
                     {currentProducts.map(p => (
-                        <ProductCard key={p.id} product={p} />
+                        <ProductCard key={p.id} product={p} openNotification={openNotification} />
                     ))}
                 </Row>
 
                 {/* Componente de paginación */}
-
                 <Pagination
                     responsive
                     current={currentPage}

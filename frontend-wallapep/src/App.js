@@ -1,5 +1,5 @@
-import {Route, Routes, useLocation, useNavigate} from "react-router-dom";
-import {Layout, notification} from 'antd';
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Layout, notification } from 'antd';
 import { useState, useEffect } from "react";
 import LoginFormComponent from "./components/user/LoginFormComponent";
 import CreateUserComponent from "./components/user/CreateUserComponent";
@@ -10,6 +10,8 @@ import ListMyProductsComponent from "./components/products/ListMyProductsCompone
 import MenuApp from "./components/common/MenuApp";
 import EditProductComponent from "./components/products/EditProductComponent";
 import FooterApp from "./components/common/FooterApp";
+import MyTransactionsComponent from "./components/transactions/MyTransactionsComponent";
+import ProfileUser from "./components/user/ProfileUser";
 
 let App = () => {
     const [api, contextHolder] = notification.useNotification();
@@ -28,9 +30,9 @@ let App = () => {
         checkUserAccess(isActive)
     }
 
-    let checkUserAccess= async (isActive) => {
+    let checkUserAccess = async (isActive) => {
         let href = location.pathname
-        if (!isActive && !["/", "/login","/register"].includes(href) ){
+        if (!isActive && !["/", "/login", "/register"].includes(href)) {
             navigate("/login")
         }
     }
@@ -58,7 +60,7 @@ let App = () => {
             if (!jsonData.activeApiKey) {
                 navigate("/login");
             }
-            return(jsonData.activeApiKey)
+            return (jsonData.activeApiKey)
         } else {
             setLogin(false);
             navigate("/login");
@@ -78,7 +80,7 @@ let App = () => {
 
     return (
         <Layout className="layout" style={{ minHeight: "100vh" }}>
-            { contextHolder }
+            {contextHolder}
             <Header>
                 <MenuApp login={login} setLogin={setLogin} />
             </Header>
@@ -86,13 +88,15 @@ let App = () => {
                 <div className="site-layout-content">
                     <Routes>
                         <Route path="/" element={<h1>Index</h1>} />
-                        <Route path="/register" element={<CreateUserComponent setLogin={setLogin} openNotification={openNotification}/>} />
+                        <Route path="/register" element={<CreateUserComponent setLogin={setLogin} openNotification={openNotification} />} />
                         <Route path="/login" element={<LoginFormComponent setLogin={setLogin} openNotification={openNotification} />} />
-                        <Route path="/products" element={<ListProductsComponent openNotification={openNotification}/>} />
+                        <Route path="/products" element={<ListProductsComponent openNotification={openNotification} />} />
                         <Route path="/products/edit/:id" element={<EditProductComponent openNotification={openNotification} />} />
                         <Route path="/products/:id" element={<DetailsProductComponent openNotification={openNotification} />} />
                         <Route path="/products/create" element={<CreateProductComponent openNotification={openNotification} />} />
                         <Route path="/products/own" element={<ListMyProductsComponent openNotification={openNotification} />} />
+                        <Route path="/myTransactions" element={<MyTransactionsComponent openNotification={openNotification} />} />
+                        <Route path="/profile/:userId" element={<ProfileUser openNotification={openNotification} />} />
                     </Routes>
                 </div>
             </Content>

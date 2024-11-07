@@ -1,28 +1,10 @@
 import {modifyStateProperty} from "../../utils/utilsState";
 import {Select} from "antd";
+import {selectOptions} from "../../utils/useCountries";
 
 let CountrySelect = (props) => {
 
     let { formData, setFormData } = props
-
-    let selectOptions = [
-        {
-            label: 'Spain',
-            code:  'ES'
-        },
-        {
-            label: 'United Kingdom',
-            code: 'GB'
-        },
-        {
-            label: 'France',
-            code: 'FR',
-        },
-        {
-            label: 'Portugal',
-            code: 'PT'
-        }
-    ]
 
     return (
         <Select

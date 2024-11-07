@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react";
-import {Link, useNavigate, useParams} from "react-router-dom";
-import {Typography, Card, Descriptions, Image, Button, Row, Col, Flex, Tag} from 'antd';
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { Typography, Card, Descriptions, Image, Button, Row, Col, Flex, Tag, Avatar } from 'antd';
 import { ShoppingOutlined } from "@ant-design/icons";
 import { checkURL } from "../../utils/utilsURL";
-import {categories} from "../../utils/useCategories";
+import { categories } from "../../utils/useCategories";
+import { joinAllServerErrorMessages, setServerErrors } from "../../utils/utilsValidation";
 
-let DetailsProductComponent = () => {
+let DetailsProductComponent = (props) => {
+    let { openNotification } = props;
     const { id } = useParams();
     let navigate = useNavigate();
     let [product, setProduct] = useState({});
+
+    let [formErrors, setFormErrors] = useState({})
 
     useEffect(() => {
         getProduct(id);
@@ -32,14 +36,15 @@ let DetailsProductComponent = () => {
         if (response.ok) {
             let jsonData = await response.json();
             if (jsonData.affectedRows === 1) {
-                // Handle successful purchase
+                openNotification("top", "Product purchased successfully", "success");
+                navigate("/products");
             }
         } else {
             let responseBody = await response.json();
             let serverErrors = responseBody.errors;
-            serverErrors.forEach(e => {
-                console.log("Error: " + e.msg);
-            });
+            setServerErrors(serverErrors, setFormErrors)
+            let notificationMsg = joinAllServerErrorMessages(serverErrors)
+            openNotification("top", notificationMsg, "error")
         }
     };
 
@@ -60,85 +65,136 @@ let DetailsProductComponent = () => {
             let existsImage = await checkURL(urlImage);
             jsonData.image = existsImage ? urlImage : "/imageMockup.png";
             jsonData.categoryInfo = categories.find(cat => cat.value === jsonData.category);
+
+            let seller = await getSeller(jsonData.sellerId);
+            jsonData.seller = seller;
+
             setProduct(jsonData);
         } else {
             let responseBody = await response.json();
             let serverErrors = responseBody.errors;
-            serverErrors.forEach(e => {
-                console.log("Error: " + e.msg);
-            });
+            setServerErrors(serverErrors, setFormErrors)
+            let notificationMsg = joinAllServerErrorMessages(serverErrors)
+            openNotification("top", notificationMsg, "error")
         }
     };
 
-    let clickReturn = () => {
-        navigate("/products");
-    };
+    let getSeller = async (sellerId) => {
+        let response = await fetch(
+            process.env.REACT_APP_BACKEND_BASE_URL + "/users/" + sellerId,
+            {
+                method: "GET",
+                headers: {
+                    "apikey": localStorage.getItem("apiKey")
+                },
+            }
+        );
 
-    const { Text } = Typography;
+        if (response.ok) {
+            let jsonData = await response.json();
+            return jsonData;
+        } else {
+            let responseBody = await response.json();
+            let serverErrors = responseBody.errors;
+            setServerErrors(serverErrors, setFormErrors)
+            let notificationMsg = joinAllServerErrorMessages(serverErrors)
+            openNotification("top", notificationMsg, "error")
+            return null;
+        }
+    }
 
     return (
         <>
-            <Row style={{marginLeft: "25%", marginTop: "5%"}}>
+            <Row style={{ marginLeft: "25%", marginTop: "5%" }}>
                 <Typography.Title level={4}>
                     <Link to={"/products"}>Products</Link> / {product.title}
                 </Typography.Title>
             </Row>
-        <Row justify="space-around" align="left">
-            <Card
-                hoverable
-                style={{width: "50vw", alignSelf: 'center'}}
-                styles={{
-                    body: {
-                        padding: 0,
-                        overflow: 'hidden',
-                    },
-                }}
-            >
-                <Flex justify="space-between">
-                    <img
-                        alt="avatar"
-                        src={product.image}
-                        style={{display: 'block', width: "50%"}}
-                    />
-                    <Flex
-                        vertical
-                        style={{
-                            padding: 32,
-                            width: "50%"
-                        }}
-                    >
-                        <Typography.Title level={3}>
-                            {product.title}
-                        </Typography.Title>
+            <Row justify="space-around" align="left">
+                <Card
+                    hoverable
+                    style={{ width: "50vw", alignSelf: 'center' }}
+                    styles={{
+                        body: {
+                            padding: 0,
+                            overflow: 'hidden',
+                        },
+                    }}
+                >
+                    <Flex justify="space-between">
+                        <img
+                            alt="avatar"
+                            src={product.image}
+                            style={{ display: 'block', width: "50%" }}
+                        />
+                        <Flex
+                            vertical
+                            style={{
+                                padding: 32,
+                                width: "50%"
+                            }}
+                        >
+                            <Typography.Title level={3} style={{ fontWeight: 'bold' }}>
+                                {product.title}
+                            </Typography.Title>
 
-                        <Typography.Title level={4}>
-                            ${product.price}
-                        </Typography.Title>
+                            <Typography.Title level={4} style={{ fontWeight: 'bold' }}>
+                                ${product.price}
+                            </Typography.Title>
 
-                        <Typography.Text>
-                            {product.description}
-                        </Typography.Text>
+                            <Typography.Text>
+                                {product.description}
+                            </Typography.Text>
 
-                        <Typography.Text>
-                            {/*
-                            <Tag color={product.categoryInfo.color}>
-                                {product.categoryInfo.icon} {product.categoryInfo.label}
-                            </Tag>
-                            */}
-                        </Typography.Text>
+                            {
+                                product.categoryInfo &&
+                                <Typography.Text style={{ fontWeight: 'bold', margin: "20px 0" }}>
+                                    <Tag color={product.categoryInfo.color}>
+                                        {product.categoryInfo.icon} {product.categoryInfo.label}
+                                    </Tag>
+                                </Typography.Text>
+                            }
 
-                        <Typography.Text>
-                            {/* Me falta meterle la seller */}
-                        </Typography.Text>
+                            {
+                                product.seller && (
+                                    <Link to={`/profile/${product.seller.id}`}>
+                                        <Avatar
+                                            size="large"
+                                            style={{ backgroundColor: "#ff0000", marginRight: 12 }}
+                                        >
+                                            {product.seller.email?.charAt(0)}
+                                        </Avatar>
+                                        {
+                                            product.seller.name && (
+                                                <Typography.Text style={{ fontWeight: 'bold', color: 'black' }}>
+                                                    Seller: {product.seller.name}
+                                                </Typography.Text>
+                                            )
+                                        }
+                                    </Link>
+                                )
+                            }
+                            {
+                                product.seller && (localStorage.getItem("email") === product.seller.email) ? (
+                                    <Button type="primary" disabled style={{ margin: "20px 0" }}>
+                                        <ShoppingOutlined /> Buy
+                                    </Button>
+                                ) : (
+                                    product.buyerEmail === null ? (
+                                        <Button type="primary" onClick={buyProduct} style={{ margin: "20px 0" }} >
+                                            <ShoppingOutlined /> Buy
+                                        </Button>
+                                    ) :
+                                        (
+                                            <Typography.Text strong type="danger" style={{ fontSize: "30px", marginTop: "30px" }}>Sold</Typography.Text>
+                                        )
+                                )
+                            }
 
-
-                        <Button type="primary" onClick={() => navigate("/payment/" + product.id)}>
-                            <ShoppingOutlined /> Buy
-                        </Button>
+                        </Flex>
                     </Flex>
-                </Flex>
-            </Card>
-        </Row>
+                </Card>
+            </Row>
         </>
     );
 }
