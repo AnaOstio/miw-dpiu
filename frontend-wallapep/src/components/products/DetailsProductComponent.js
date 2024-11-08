@@ -37,7 +37,7 @@ let DetailsProductComponent = (props) => {
             let jsonData = await response.json();
             if (jsonData.affectedRows === 1) {
                 openNotification("top", "Product purchased successfully", "success");
-                navigate("/products");
+                navigate("/all-products/all");
             }
         } else {
             let responseBody = await response.json();
@@ -107,7 +107,7 @@ let DetailsProductComponent = (props) => {
         <>
             <Row style={{ marginLeft: "25%", marginTop: "5%" }}>
                 <Typography.Title level={4}>
-                    <Link to={"/products"}>Products</Link> / {product.title}
+                    <Link to={"/all-products/all"}>Products</Link> / {product.title}
                 </Typography.Title>
             </Row>
             <Row justify="space-around" align="left">

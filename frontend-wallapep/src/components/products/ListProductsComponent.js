@@ -4,6 +4,7 @@ import { checkURL } from "../../utils/utilsURL";
 import ProductCard from "./ProductCard";
 import Filters from "./filters/Filters";
 import { useParams } from "react-router-dom";
+import {ShopOutlined} from "@ant-design/icons";
 
 const { Title } = Typography;
 
@@ -134,7 +135,7 @@ let ListProductsComponent = (props) => {
             </Col>
 
             <Col span={18}>
-                <Title level={4}>Products - {filteredProducts.length} results</Title>
+                <Title level={4}><ShopOutlined /> Products - {filteredProducts.length} results</Title>
 
                 <Row gutter={[16, 16]}>
                     {currentProducts.map(p => (

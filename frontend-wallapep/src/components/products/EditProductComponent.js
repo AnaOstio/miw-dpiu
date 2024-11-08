@@ -63,10 +63,6 @@ let EditProductComponent = () => {
         }
     }
 
-    let clickReturn = () => {
-        navigate("/products")
-    }
-
     return (
         <Row align="middle" justify="center" style={{ minHeight: "70vh" }}>
             <Col>

@@ -31,7 +31,7 @@ let ProductCard = (props) => {
             let jsonData = await response.json();
             if (jsonData.affectedRows === 1) {
                 openNotification("top", "Product purchased successfully", "success");
-                navigate("/products");
+                navigate("/all-products/all");
             }
         } else {
             let responseBody = await response.json();

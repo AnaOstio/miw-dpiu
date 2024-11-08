@@ -30,7 +30,7 @@ let CreateProductComponent = (props) => {
             let data = await response.json()
             await uploadImage(data.productId)
             openNotification("top", "Product added", "success");
-            navigate("/products")
+            navigate("/all-products/all")
         } else {
             let responseBody = await response.json();
             let serverErrors = responseBody.errors;
