@@ -45,7 +45,7 @@ let MenuApp = ({ login, setLogin }) => {
 
                     {login && (
                         <Menu theme="dark" mode="horizontal" style={{ width: "100%", padding: 0, margin: 0 }} items={[
-                            { key: "logo", label: <img src="/logo.png" width="40" height="40" style={{ display: "block", margin: "0 auto" }} /> },
+                            { key: "logo", label: <Link to={"/"}><img src="/logo.png" width="40" height="40" style={{ display: "block", margin: "0 auto" }} /> </Link>},
                             { key: "menuProducts", icon: <ShopOutlined />, label: <Link to="/all-products/all">Products</Link> },
                             { key: "menuCreateProduct", icon: <PlusCircleOutlined />, label: <Link to="/products/create">Sell</Link> },
                             { key: "menuMyProduct", icon: <FileOutlined />, label: <Link to="/products/own">My Products</Link> },
