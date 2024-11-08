@@ -9,6 +9,7 @@ import {
     validateFormDataInputRequired
 } from "../../utils/utilsValidation";
 import {useNavigate} from "react-router-dom";
+import {EuroCircleOutlined, FilterOutlined, FormOutlined, PlusOutlined} from "@ant-design/icons";
 
 let CreateProductComponent = (props) => {
 
@@ -72,7 +73,7 @@ let CreateProductComponent = (props) => {
         <Row align="middle" justify="center" style={{ minHeight: "70vh" }}>
             <Col>
                 <Card title="Create product" style={{ width: "500px" }}>
-                    <Form.Item label=""
+                    <Form.Item label={<FormOutlined />}
                                validateStatus={
                                    validateFormDataInputRequired(
                                        formData, "title", formErrors, setFormErrors) ? "success" : "error"}
@@ -85,14 +86,14 @@ let CreateProductComponent = (props) => {
                             <Typography.Text type="danger"> {formErrors?.title?.msg} </Typography.Text>}
                     </Form.Item>
 
-                    <Form.Item label="">
+                    <Form.Item label={<FormOutlined />}>
                         <Input onChange={
                             (i) => modifyStateProperty(
                                 formData, setFormData, "description", i.currentTarget.value)}
                                size="large" type="text" placeholder="description"></Input>
                     </Form.Item>
 
-                    <Form.Item label=""
+                    <Form.Item label={<EuroCircleOutlined />}
                                validateStatus={
                                    validateFormDataInputRequired(
                                        formData, "price", formErrors, setFormErrors) ? "success" : "error"}
@@ -105,7 +106,7 @@ let CreateProductComponent = (props) => {
                             <Typography.Text type="danger"> {formErrors?.price?.msg} </Typography.Text>}
                     </Form.Item>
 
-                    <Form.Item label=""
+                    <Form.Item label={<FilterOutlined />}
                                validateStatus={
                                    validateFormDataInputRequired(
                                        formData, "category", formErrors, setFormErrors) ? "success" : "error"}
@@ -143,8 +144,8 @@ let CreateProductComponent = (props) => {
 
                     <Form.Item>
                         {allowSubmitForm(formData,formErrors,requiredInForm) ?
-                            <Button type="primary" block onClick={clickCreateProduct}>Sell Product</Button> :
-                            <Button type="primary" block disabled>Sell Product</Button>
+                            <Button type="primary" block onClick={clickCreateProduct}><PlusOutlined /> Sell Product</Button> :
+                            <Button type="primary" block disabled><PlusOutlined /> Sell Product</Button>
                         }
                     </Form.Item>
 

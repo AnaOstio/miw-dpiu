@@ -5,6 +5,7 @@ import { modifyStateProperty } from "../../utils/utilsState";
 import { dateFormatTemplate, timestampToDate } from "../../utils/utilsDate";
 import {categories} from "../../utils/useCategories";
 import {joinAllServerErrorMessages, setServerErrors, validateFormDataInputRequired} from "../../utils/utilsValidation";
+import {EditOutlined, EuroCircleOutlined, FilterOutlined, FormOutlined} from "@ant-design/icons";
 
 let EditProductComponent = (props) => {
     let {openNotification} = props
@@ -69,9 +70,9 @@ let EditProductComponent = (props) => {
     return (
         <Row align="middle" justify="center" style={{ minHeight: "70vh" }}>
             <Col>
-                <Card title="Edit product" style={{ width: "500px" }}>
+                <Card title={ "Edit product"} style={{ width: "500px" }}>
 
-                    <Form.Item label="">
+                    <Form.Item label={<FormOutlined />}>
                         <Input onChange={
                             (i) => modifyStateProperty(formData, setFormData, "title", i.currentTarget.value)}
                             size="large" type="text" placeholder="product title"
@@ -79,7 +80,7 @@ let EditProductComponent = (props) => {
                         </Input>
                     </Form.Item>
 
-                    <Form.Item label="">
+                    <Form.Item label={<FormOutlined />}>
                         <Input onChange={
                             (i) => modifyStateProperty(formData, setFormData, "description", i.currentTarget.value)}
                             size="large" type="text" placeholder="description"
@@ -87,7 +88,7 @@ let EditProductComponent = (props) => {
                         </Input>
                     </Form.Item>
 
-                    <Form.Item label="">
+                    <Form.Item label={<EuroCircleOutlined />}>
                         <Input onChange={
                             (i) => modifyStateProperty(formData, setFormData, "price", i.currentTarget.value)}
                             size="large" type="number" placeholder="price"
@@ -97,7 +98,7 @@ let EditProductComponent = (props) => {
 
                     {
                         formData.fullCategoy && (
-                            <Form.Item label=""
+                            <Form.Item label={<FilterOutlined />}
                             >
                                 <Select
                                     placeholder="Select category"
@@ -119,7 +120,7 @@ let EditProductComponent = (props) => {
                     }
 
 
-                    <Button type="primary" onClick={clickEditProduct} block >Edit Product</Button>
+                    <Button type="primary" onClick={clickEditProduct} block > <EditOutlined />Edit Product</Button>
                 </Card>
             </Col>
         </Row>
