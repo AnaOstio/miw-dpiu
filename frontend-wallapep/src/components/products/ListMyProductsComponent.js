@@ -125,7 +125,7 @@ let ListMyProductsComponent = (props) => {
             title: "Buyer",
             dataIndex: [],
             render: (product) =>
-                <Link to={"/user/" + product.buyerId}>{product.buyerEmail}</Link>
+                <Link to={"/profile/" + product.buyerId}>{product.buyerEmail}</Link>
         },
         {
             title: "Actions",

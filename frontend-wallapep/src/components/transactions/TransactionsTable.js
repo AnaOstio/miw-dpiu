@@ -56,7 +56,7 @@ let TransactionsTable = (props) => {
             title: sold ? "Buyer" : "Seller",
             dataIndex: [],
             render: (product) =>
-                <Link to={"/user/" + (sold ? product.buyerId : product.sellerId)}>{sold ? product.buyerId : product.sellerEmail}</Link>
+                <Link to={"/profile/" + (sold ? product.buyerId : product.sellerId)}>{sold ? product.buyerId : product.sellerEmail}</Link>
         },
         {
             title: "Description",
