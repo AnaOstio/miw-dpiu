@@ -2,7 +2,12 @@ import { useState } from "react";
 import { modifyStateProperty } from "../../utils/utilsState";
 import {Card, Input, Button, Row, Col, Form, Upload, Select, Typography, Tag} from "antd";
 import {categories} from "../../utils/useCategories";
-import {allowSubmitForm, validateFormDataInputRequired} from "../../utils/utilsValidation";
+import {
+    allowSubmitForm,
+    joinAllServerErrorMessages,
+    setServerErrors,
+    validateFormDataInputRequired
+} from "../../utils/utilsValidation";
 import {useNavigate} from "react-router-dom";
 
 let CreateProductComponent = (props) => {
@@ -34,9 +39,9 @@ let CreateProductComponent = (props) => {
         } else {
             let responseBody = await response.json();
             let serverErrors = responseBody.errors;
-            serverErrors.forEach(e => {
-                console.log("Error: " + e.msg)
-            })
+            setServerErrors(serverErrors, setFormErrors);
+            let notificationMsg = joinAllServerErrorMessages(serverErrors);
+            openNotification("top", notificationMsg, "error");
         }
     }
 
@@ -57,9 +62,9 @@ let CreateProductComponent = (props) => {
         } else {
             let responseBody = await response.json();
             let serverErrors = responseBody.errors;
-            serverErrors.forEach(e => {
-                console.log("Error: " + e.msg)
-            })
+            setServerErrors(serverErrors, setFormErrors);
+            let notificationMsg = joinAllServerErrorMessages(serverErrors);
+            openNotification("top", notificationMsg, "error");
         }
     }
 

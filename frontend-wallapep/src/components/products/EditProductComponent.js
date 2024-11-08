@@ -4,13 +4,16 @@ import {Button, Card, Col, Input, Row, Form, DatePicker, Select, Tag, Typography
 import { modifyStateProperty } from "../../utils/utilsState";
 import { dateFormatTemplate, timestampToDate } from "../../utils/utilsDate";
 import {categories} from "../../utils/useCategories";
-import {validateFormDataInputRequired} from "../../utils/utilsValidation";
+import {joinAllServerErrorMessages, setServerErrors, validateFormDataInputRequired} from "../../utils/utilsValidation";
 
-let EditProductComponent = () => {
+let EditProductComponent = (props) => {
+    let {openNotification} = props
+
     const { id } = useParams();
     let navigate = useNavigate();
 
     let [formData, setFormData] = useState({})
+    let [formErrors, setFormErrors] = useState({})
 
     useEffect(() => {
         getProduct(id);
@@ -33,9 +36,9 @@ let EditProductComponent = () => {
         } else {
             let responseBody = await response.json();
             let serverErrors = responseBody.errors;
-            serverErrors.forEach(e => {
-                console.log("Error: " + e.msg)
-            })
+            setServerErrors(serverErrors, setFormErrors);
+            let notificationMsg = joinAllServerErrorMessages(serverErrors);
+            openNotification("top", notificationMsg, "error");
         }
     }
 
@@ -57,9 +60,9 @@ let EditProductComponent = () => {
         } else {
             let responseBody = await response.json();
             let serverErrors = responseBody.errors;
-            serverErrors.forEach(e => {
-                console.log("Error: " + e.msg)
-            })
+            setServerErrors(serverErrors, setFormErrors);
+            let notificationMsg = joinAllServerErrorMessages(serverErrors);
+            openNotification("top", notificationMsg, "error");
         }
     }
 

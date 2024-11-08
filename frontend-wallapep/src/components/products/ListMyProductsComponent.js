@@ -3,12 +3,14 @@ import { Table, Space, Tag } from 'antd';
 import { Link } from "react-router-dom";
 import { timestampToDDMMYYYY } from "../../utils/utilsDate";
 import { categories } from "../../utils/useCategories";
+import {joinAllServerErrorMessages, setServerErrors} from "../../utils/utilsValidation";
 
 let ListMyProductsComponent = (props) => {
 
     let { openNotification } = props;
 
     let [products, setProducts] = useState([])
+    let [formErrors, setFormErrors] = useState([])
 
     let [tableParams, setTableParams] = useState({
         pagination: {
@@ -41,9 +43,9 @@ let ListMyProductsComponent = (props) => {
         } else {
             let responseBody = await response.json();
             let serverErrors = responseBody.errors;
-            serverErrors.forEach(e => {
-                console.log("Error: " + e.msg)
-            })
+            setServerErrors(serverErrors, setFormErrors);
+            let notificationMsg = joinAllServerErrorMessages(serverErrors);
+            openNotification("top", notificationMsg, "error");
         }
     }
 
@@ -76,9 +78,9 @@ let ListMyProductsComponent = (props) => {
         } else {
             let responseBody = await response.json();
             let serverErrors = responseBody.errors;
-            serverErrors.forEach(e => {
-                console.log("Error: " + e.msg)
-            })
+            setServerErrors(serverErrors, setFormErrors);
+            let notificationMsg = joinAllServerErrorMessages(serverErrors);
+            openNotification("top", notificationMsg, "error");
         }
     }
 
