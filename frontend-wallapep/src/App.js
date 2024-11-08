@@ -82,7 +82,7 @@ let App = () => {
     return (
         <Layout className="layout" style={{ minHeight: "100vh" }}>
             {contextHolder}
-            <Header>
+            <Header style={{height:'100%'}}>
                 <MenuApp login={login} setLogin={setLogin} />
             </Header>
             <Content style={{ padding: "20px 50px" }}>
